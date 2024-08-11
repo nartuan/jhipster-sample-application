@@ -1,0 +1,91 @@
+entity User {
+  @Id id Long
+  uid UUID unique
+  msid UUID unique
+  username String maxlength(50)
+  fullName String maxlength(50)
+  email String maxlength(100)
+  isAdmin Integer
+  isStaff Integer
+  isActive Integer
+  
+  updatedBy String maxlength(50)
+  updatedAt Instant
+  createdBy String maxlength(50)
+  createdAt Instant
+  isDeleted Integer
+}
+
+entity Role {
+ @Id code String maxlength(50)
+ name String maxlength(50)
+ description String
+ isActive Integer
+}
+
+entity Permission {
+ @Id code String maxlength(50)
+ name String maxlength(50)
+ description String
+ isActive Integer
+}
+
+entity Post {
+ @Id id Long
+ title String maxlength(50)
+ urlSlug String maxlength(50)
+ author Long
+ publishedAt Instant
+ 
+  updatedBy String maxlength(50)
+  updatedAt Instant
+  createdBy String maxlength(50)
+  createdAt Instant
+  isDeleted Integer
+}
+
+entity PostHistory {
+ @Id id Long
+ postId Long
+ status String maxlength(10)
+ performedBy Long
+ performedAt Instant
+ 
+  updatedBy String maxlength(50)
+  updatedAt Instant
+  createdBy String maxlength(50)
+  createdAt Instant
+  isDeleted Integer
+}
+
+
+entity PostSection {
+ @Id id Long
+ postId Long
+ status String maxlength(10)
+ value String
+ type String
+ order Integer
+
+  updatedBy String maxlength(50)
+  updatedAt Instant
+  createdBy String maxlength(50)
+  createdAt Instant
+  isDeleted Integer
+}
+
+relationship ManyToMany {
+    User{role(code)} to Role{user}
+    
+    Role{permission(code)} to Permission{role}
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+    Post to PostHistory{post}
+    Post to PostSection{post}
+}
+
+relationship ManyToOne {
+	Post{author} to User
+}
